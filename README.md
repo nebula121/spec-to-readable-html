@@ -1,6 +1,7 @@
 # spec-to-readable-html
 
-Markdown / テキストの仕様書を、要約・構造再編・図解・トレーサビリティ付きの「読みやすい HTML ドキュメント」に変換する Agent Skill プロジェクトです。
+Markdown / テキストの仕様書を、**認知展開（Cognitive Unpacking）・図解・トレーサビリティ付きの「人間向けビジュアル HTML ドキュメント」**に変換する Agent Skill プロジェクトです。
+[nebula121/AIDD_Template](https://github.com/nebula121/AIDD_Template) の 3層CQRS仕様書体系に最適化された Human Read-Only View 生成エンジンとして動作します。
 
 ---
 
@@ -13,13 +14,22 @@ Markdown / テキストの仕様書を、要約・構造再編・図解・トレ
 - **コア不可侵ルール**: [docs/core-rules.md](docs/core-rules.md)
 - **システム概要 ＆ スコープ**: [docs/system/overview.md](docs/system/overview.md)
 - **システムアーキテクチャ ＆ コンポーネント構成**: [docs/system/architecture.md](docs/system/architecture.md)
+- **スキル定義正本**: [docs/components/skill-definition.md](docs/components/skill-definition.md)
+- **HTMLテンプレート正本**: [docs/components/html-template.md](docs/components/html-template.md)
 
 ---
 
 ## 2. スキル本体 ＆ ドキュメント
 
-エージェントスキルのインストール方法、利用手順、およびテンプレートのカスタマイズ方法については、以下のドキュメントを参照してください：
+エージェントスキルの機能詳細、インストール方法、利用手順、およびテンプレートのカスタマイズ方法については、以下のドキュメントを参照してください：
 
-- **スキル詳細・利用方法**: [spec-to-readable-html/README.md](spec-to-readable-html/README.md)
-- **スキル定義正本**: [spec-to-readable-html/SKILL.md](spec-to-readable-html/SKILL.md)
+- **スキル概要・利用方法**: [spec-to-readable-html/README.md](spec-to-readable-html/README.md)
+- **スキル実行指示書**: [spec-to-readable-html/SKILL.md](spec-to-readable-html/SKILL.md)
 - **HTML出力テンプレートガイド**: [spec-to-readable-html/references/html-output-template.md](spec-to-readable-html/references/html-output-template.md)
+- **HTMLベーステンプレート**: [spec-to-readable-html/references/template.html](spec-to-readable-html/references/template.html)
+
+---
+
+## 3. ライセンス
+
+[MIT](./spec-to-readable-html/LICENSE) © 2026 KeMezz
