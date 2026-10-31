@@ -1,6 +1,6 @@
 ---
 name: spec-to-readable-html
-description: Transform Markdown or text specifications into human-readable HTML documents with cognitive unpacking (key takeaways, before/after comparisons, concrete scenarios, mandatory diagrams) and portal navigation. Optimized for 3-layer CQRS specification frameworks.
+description: Transform Markdown or text specifications into human-readable HTML documents with cognitive unpacking (key takeaways, before/after comparisons, concrete scenarios, mandatory diagrams) and portal navigation. Optimized for 4-layer CQRS specification frameworks.
 argument-hint: "[target] [lang]"
 arguments: target, lang
 ---
@@ -9,7 +9,7 @@ arguments: target, lang
 
 This skill transforms formal, dense, and structured specifications (Markdown or plain text) into visually engaging, human-readable HTML documents optimized for quick comprehension, decision-making, and alignment.
 
-It operates as the **Human Read-Only View** in a CQRS specification architecture (e.g., [nebula121/AIDD_Template](https://github.com/nebula121/AIDD_Template)). It does **not** perform literal Markdown-to-HTML conversion or lossy superficial summarization. Instead, it systematically applies **Cognitive Unpacking** to reveal the *intent*, *value*, and *concrete reality* behind abstract rules and schemas.
+It operates as the **Human Read-Only View** in a 4-layer CQRS specification architecture (e.g., [nebula121/AIDD_Template](https://github.com/nebula121/AIDD_Template)). It does **not** perform literal Markdown-to-HTML conversion or lossy superficial summarization. Instead, it systematically applies **Cognitive Unpacking** to reveal the *intent*, *value*, and *concrete reality* behind abstract rules and schemas.
 
 When invoked:
 - `$target` sets the target specification file, directory, or scope (default: `docs/specs`).
@@ -107,7 +107,7 @@ Structured tables and RFC 2119 keywords (`MUST`, `MUST NOT`, `SHOULD`) are effic
 Follow this cognitive sequence for individual specification HTML documents:
 
 ```
-1. Global Navigation (`.global-nav`: Layer dropdowns + mobile accordion)
+1. Global Navigation (`.global-nav`: 4-layer dropdowns + mobile accordion)
 2. Breadcrumbs Bar (`.breadcrumbs`: Relative path and current document)
 3. Document Header (`.doc-header`: Title, Subtitle, Uniform `.doc-meta` pills + status color badge + navigation links)
 4. TOC Sidebar (`.toc`: Sticky on desktop, `<details class="toc-details">` mobile accordion with auto-close on link tap, restricted to H2/H3)

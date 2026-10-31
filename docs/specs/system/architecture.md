@@ -32,7 +32,7 @@ flowchart LR
 
 <!-- @spec:component-map -->
 
-本表の各行は `docs/components/<id>.md` の個別仕様書と **1対1（全単射）** で対応する (**MUST**)。
+本表の各行はリンク先の個別仕様書と **1対1（全単射）** で対応する (**MUST**)。
 
 | コンポーネントID | 個別仕様書 | 対象コードパス (`target_files`) | 単一責務の定義 | 依存先コンポーネント |
 | :--- | :--- | :--- | :--- | :--- |
@@ -50,3 +50,11 @@ flowchart LR
 | **外部入力** | CLI / Slash Command (`/spec-to-readable-html [target] [lang]`) | Markdownファイル、プレーンテキスト仕様書（既定対象: `docs/specs`）、言語引数 | 入力仕様の言語判定（既定: `ja`）、文字コード UTF-8 検証、`docs/specs/spec-router.md` の存在判定 (`MUST`) |
 | **コア処理** | Agent Skill 推論プロトコル | コンテキスト内テキスト、要約・図解選定ルール | RFC 2119キーワード保持、未確証事項のバッジ分類、4分岐実行契約、HTML安全エスケープ (`MUST`) |
 | **外部出力・永続化** | ポータブル HTML / ファイル出力 | ローカルファイルシステム（既定出力先: `docs/specs-html/*`、指定時は階層ミラーリング） | 埋め込みCSS適用、完全自己完結性（Mermaid CDN依存の注記またはSVG置換）の確保、インデックス不在時の1件提案＋対話出力先確定 (`MUST`) |
+
+---
+
+## 4. ユースケース構成 ＆ オーケストレーション境界
+
+<!-- @spec:usecase-map -->
+
+本プロジェクトは Agent Skill およびテンプレート提供に特化したライブラリ・ツールプロジェクトであり、現行スコープは Layer 3 コンポーネント（`skill-definition`, `html-template`）の連携で完結する。ユースケース仕様書を策定する場合は `docs/specs/usecases/_template.md` に従い追加する。
