@@ -82,7 +82,8 @@ Structured tables and RFC 2119 keywords (`MUST`, `MUST NOT`, `SHOULD`) are effic
   - Sequence / Protocol exchanges: `sequenceDiagram`
   - Data models / Entities: `erDiagram`
   - Multi-layer defense / Security boundaries: `flowchart LR` / `flowchart TD` with subgraphs
-- Wrap diagrams in `<figure class="diagram-container"><div class="mermaid">...</div><figcaption>Caption</figcaption></figure>`.
+- Wrap diagrams in `<figure class="diagram-container"><div class="diagram-badge">🔍 拡大表示</div><div class="mermaid">...</div><figcaption>Caption</figcaption></figure>`.
+- Diagrams are constrained to `max-height: 520px` to prevent excessive scroll jumping. In line with the Ponytail principle, do NOT add gratuitous bounce, hover animations, or blinking effects to the badge.
 - Use the base template's pan & zoom lightbox (click or `Enter`/`Space` to inspect complex diagrams).
 
 ### 3. Why & Before/After Comparison (`.comparison-grid`) — Mandatory
@@ -95,8 +96,9 @@ Structured tables and RFC 2119 keywords (`MUST`, `MUST NOT`, `SHOULD`) are effic
 - Clearly annotate non-normative or deduced examples with the `[Inferred]` or `[Example]` status badge.
 - Number each step (`.scenario-step-num`) and show input/output payloads or execution effects.
 
-### 5. Responsive Tables (`.table-responsive`) — Mandatory
-- Every structured table (`.spec-table` or standard `table`) MUST be wrapped in `<div class="table-responsive">...</div>` to enable clean horizontal scrolling on narrow viewports without breaking page layout.
+### 5. Responsive Tables (`.table-responsive`) ＆ Sticky Columns (`.table-sticky-col`) — Mandatory
+- Every structured table (`.spec-table` or standard `table`) MUST be wrapped in `<div class="table-responsive">...</div>` to enable clean horizontal scrolling on narrow viewports with a sticky header and scroll hint gradient shadow.
+- When fixing the first column (e.g. symbol or API name), add `.table-sticky-col` to `.spec-table`. The first column is guarded with `max-width: 180px` and text-wrapping to prevent obscuring subsequent columns, and automatically falls back to static on narrow viewports (<=640px).
 
 ---
 
@@ -107,8 +109,8 @@ Follow this cognitive sequence for individual specification HTML documents:
 ```
 1. Global Navigation (`.global-nav`: Layer dropdowns + mobile accordion)
 2. Breadcrumbs Bar (`.breadcrumbs`: Relative path and current document)
-3. Document Header (`.doc-header`: Title, Subtitle, Meta badges)
-4. TOC Sidebar (`.toc`: Sticky on desktop, inline on mobile)
+3. Document Header (`.doc-header`: Title, Subtitle, Uniform `.doc-meta` pills + status color badge + navigation links)
+4. TOC Sidebar (`.toc`: Sticky on desktop, `<details class="toc-details">` mobile accordion with auto-close on link tap, restricted to H2/H3)
 5. Key Takeaways (`.key-takeaway`: 3-bullet core summary)
 6. Visual Architecture / Workflow (Mandatory Mermaid Diagram)
 7. Why & Before/After Comparison (`.comparison-grid`: Before vs. After)
@@ -148,6 +150,8 @@ Maintain strict semantic distinctions using badges:
 | | `.badge-inferred` / `.badge-assumption` | Deduced by AI / scenario examples (MUST NOT present as confirmed) |
 | | `.badge-open` | Unresolved questions, missing decisions |
 | **Risk / Severity** | `.badge-risk-high` / `.badge-risk-medium` / `.badge-risk-low` | Risk assessments and security impact |
+| **Document Status** | `.badge-status-stable` (Green) / `.badge-status-draft` (Orange) / `.badge-status-deprecated` (Red) | Document lifecycle states in `.doc-meta` |
+| **GitHub Alerts** | `.callout-note` (Blue), `.callout-tip` (Green), `.callout-important` (Purple), `.callout-warning` (Orange), `.callout-caution` (Red) | Callouts paired with 16x16 Octicons SVG icons |
 
 ---
 
@@ -169,5 +173,8 @@ Before finalizing any generated HTML document, verify:
 - [ ] **Visual Completeness**: Every page has at least one valid Mermaid diagram enclosed in `<figure class="diagram-container">`.
 - [ ] **Before/After**: `.comparison-grid` clearly contrasts risks without the spec vs. value with it.
 - [ ] **Scenario**: `.scenario-box` traces an end-to-end example with `[Inferred]` / `[Example]` badges.
-- [ ] **Table Responsiveness**: Every table is wrapped in `.table-responsive`.
+- [ ] **Table Responsiveness**: Every table is wrapped in `.table-responsive` with sticky header, and wide tables use `.table-sticky-col` with the 180px guard.
+- [ ] **Mobile TOC**: TOC uses `<details class="toc-details">` and auto-closes on anchor click.
+- [ ] **Callouts & Alerts**: GitHub Alerts 5 classes (`.callout-note/tip/important/warning/caution`) use official 16x16 Octicons SVG icons.
+- [ ] **Diagrams**: All diagrams feature the static badge without distracting animations.
 - [ ] **Integrity**: Mermaid syntax parses without syntax errors; Pan & Zoom modal functions properly.
