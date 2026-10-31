@@ -70,6 +70,19 @@ Used across all pages. PC displays a sticky 52px single-row bar with layer dropd
         <div class="nav-dropdown">
           <a href="../components/component-a.html" class="nav-dropdown-item">
             <div class="nav-dropdown-title">component-a.md</div>
+            <div class="nav-dropdown-desc">個別仕様正本（静的構造）</div>
+          </a>
+        </div>
+      </li>
+      <li class="nav-item">
+        <button class="nav-trigger" type="button">
+          <span>L4 ユースケース</span>
+          <svg class="nav-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </button>
+        <div class="nav-dropdown">
+          <a href="../usecases/usecase-a.html" class="nav-dropdown-item">
+            <div class="nav-dropdown-title">usecase-a.md</div>
+            <div class="nav-dropdown-desc">ユースケース正本（動的振る舞い）</div>
           </a>
         </div>
       </li>
@@ -92,6 +105,8 @@ Used across all pages. PC displays a sticky 52px single-row bar with layer dropd
     <a href="tech-stack.html" class="m-link">tech-stack.md</a>
     <div class="m-group-title">L3 個別コンポーネント</div>
     <a href="../components/component-a.html" class="m-link">component-a.md</a>
+    <div class="m-group-title">L4 ユースケース正本</div>
+    <a href="../usecases/usecase-a.html" class="m-link">usecase-a.md</a>
   </div>
 </nav>
 
@@ -321,7 +336,7 @@ Wraps the table of contents to provide accordion collapse on mobile (auto-closes
 
 ---
 
-## 2. Portal Page (`docs/html/index.html`) Recommended Structure
+## 2. Portal Page (`docs/specs-html/index.html`) Recommended Structure
 
 ```html
 <!DOCTYPE html>
@@ -338,7 +353,7 @@ Wraps the table of contents to provide accordion collapse on mobile (auto-closes
   <!-- 2. Hero Header -->
   <header class="doc-header">
     <h1>仕様書ポータル (Specification Portal)</h1>
-    <p class="subtitle">3層CQRSアーキテクチャに基づく仕様書ビジュアルネットワーク</p>
+    <p class="subtitle">4層CQRSアーキテクチャに基づく仕様書ビジュアルネットワーク</p>
     <div class="doc-meta">
       <span class="doc-meta-item"><strong>Status:</strong> Stable</span>
       <span class="doc-meta-item"><strong>Updated:</strong> 2026-10-26</span>
@@ -417,8 +432,10 @@ Wraps the table of contents to provide accordion collapse on mobile (auto-closes
     <h1>{{TITLE}}</h1>
     <p class="subtitle">{{SUBTITLE}}</p>
     <div class="doc-meta">
-      <span class="doc-meta-item"><strong>Layer:</strong> {{LAYER}}</span>
-      <span class="doc-meta-item"><strong>Status:</strong> {{STATUS}}</span>
+      <span class="doc-meta-item"><strong>Status:</strong> <span class="badge-status badge-status-{{STATUS_CLASS}}">{{STATUS}}</span></span>
+      <span class="doc-meta-item"><strong>Spec ID:</strong> {{SPEC_ID}}</span>
+      <span class="doc-meta-item"><strong>Target:</strong> <code>{{TARGET_FILES}}</code></span>
+      <span class="doc-meta-item"><strong>Dependencies:</strong> {{DEPENDENCIES}}</span>
     </div>
   </header>
 

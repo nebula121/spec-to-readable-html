@@ -2,7 +2,7 @@
 
 Markdown / テキストの仕様書を、**認知展開（Cognitive Unpacking）・図解・トレーサビリティ付きの「人間向けビジュアル HTML ドキュメント」**へ変換する [Agent Skill](https://github.com/vercel-labs/skills) です。
 
-[nebula121/AIDD_Template](https://github.com/nebula121/AIDD_Template) をはじめとする 3層CQRS仕様書体系における **Human Read-Only View** 生成スキルとして最適化されています。単なる Markdown &rarr; HTML 変換や表層的な要約ではなく、形式知化された規則や表の背景にある「設計の意図」「導入価値」「具象データ」を紐解き、人間の迅速な理解と合意形成を支援します。
+[nebula121/AIDD_Template](https://github.com/nebula121/AIDD_Template) をはじめとする 4層CQRS仕様書体系における **Human Read-Only View** 生成スキルとして最適化されています。単なる Markdown &rarr; HTML 変換や表層的な要約ではなく、形式知化された規則や表の背景にある「設計の意図」「導入価値」「具象データ」を紐解き、人間の迅速な理解と合意形成を支援します。
 
 ---
 
@@ -48,10 +48,10 @@ npx skills add nebula121/spec-to-readable-html
 /spec-to-readable-html
 
 # 特定の仕様書のみを生成（単一仕様書モード）
-/spec-to-readable-html docs/components/my-component.md
+/spec-to-readable-html docs/specs/components/my-component.md
 
 # 言語を指定して生成（既定: ja）
-/spec-to-readable-html docs/system/overview.md en
+/spec-to-readable-html docs/specs/system/overview.md en
 ```
 
 ---

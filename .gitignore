@@ -1,9 +1,7 @@
-.DS_Store
-*.log
-
 # AIDD Workflow & Generated Views (Non-SSOT)
 ref/
 diff_summary_for_agent.txt
+docs/specs-html/
 docs/**/*.html
 *.spec.html
 
@@ -13,6 +11,14 @@ docs/**/*.html
 !.env.example
 *.pem
 *.key
+
+# OS & Editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+*~
 
 # Common Build / Runtime Caches
 __pycache__/
@@ -26,3 +32,4 @@ node_modules/
 dist/
 build/
 target/
+*.log
