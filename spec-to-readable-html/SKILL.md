@@ -12,7 +12,7 @@ This skill transforms formal, dense, and structured specifications (Markdown or 
 It operates as the **Human Read-Only View** in a CQRS specification architecture (e.g., [nebula121/AIDD_Template](https://github.com/nebula121/AIDD_Template)). It does **not** perform literal Markdown-to-HTML conversion or lossy superficial summarization. Instead, it systematically applies **Cognitive Unpacking** to reveal the *intent*, *value*, and *concrete reality* behind abstract rules and schemas.
 
 When invoked:
-- `$target` sets the target specification file, directory, or scope (default: `docs/spec`).
+- `$target` sets the target specification file, directory, or scope (default: `docs/specs`).
 - `$lang` sets the output language (default: `ja`). If omitted, Japanese is used.
 
 ---
@@ -23,45 +23,45 @@ Before generating HTML, inspect the environment and arguments to resolve the exe
 
 ```mermaid
 flowchart TD
-    Start["/spec-to-readable-html [target]"] --> CheckRouter{"Does docs/spec/spec-router.md exist?"}
+    Start["/spec-to-readable-html [target]"] --> CheckRouter{"Does docs/specs/spec-router.md exist?"}
     
     CheckRouter -- "Yes (Exists)" --> CheckTargetYes{"Is target specified?"}
-    CheckTargetYes -- "No (Omitted)" --> Case11["Case 1-1: Full Portal Conversion<br/>Target: docs/spec/*<br/>Output: docs/spec-html/*"]
-    CheckTargetYes -- "Yes (Specified)" --> Case12["Case 1-2: Mirrored Spec Conversion<br/>Target: Specified file(s)<br/>Output: docs/spec-html/* (mirrored)"]
+    CheckTargetYes -- "No (Omitted)" --> Case11["Case 1-1: Full Portal Conversion<br/>Target: docs/specs/*<br/>Output: docs/specs-html/*"]
+    CheckTargetYes -- "Yes (Specified)" --> Case12["Case 1-2: Mirrored Spec Conversion<br/>Target: Specified file(s)<br/>Output: docs/specs-html/* (mirrored)"]
 
     CheckRouter -- "No (Missing)" --> CheckTargetNo{"Is target specified?"}
-    CheckTargetNo -- "No (Omitted)" --> Case21["Case 2-1: Prompt for Target & Output<br/>Suggest exactly 1 output candidate<br/>(e.g., docs/spec-html)"]
-    CheckTargetNo -- "Yes (Specified)" --> Case22["Case 2-2: Prompt for Output<br/>Suggest exactly 1 output candidate<br/>(e.g., &lt;target-dir&gt;/spec-html)"]
+    CheckTargetNo -- "No (Omitted)" --> Case21["Case 2-1: Prompt for Target & Output<br/>Suggest exactly 1 output candidate<br/>(e.g., docs/specs-html)"]
+    CheckTargetNo -- "Yes (Specified)" --> Case22["Case 2-2: Prompt for Output<br/>Suggest exactly 1 output candidate<br/>(e.g., &lt;target-dir&gt;/specs-html)"]
 ```
 
-### 1. Case 1-1: Full Portal Mode (Target Unspecified + `docs/spec/spec-router.md` Exists)
-- **Condition**: `$target` is omitted or empty, and `docs/spec/spec-router.md` exists.
-- **Target**: All specification files under `docs/spec/*`.
+### 1. Case 1-1: Full Portal Mode (Target Unspecified + `docs/specs/spec-router.md` Exists)
+- **Condition**: `$target` is omitted or empty, and `docs/specs/spec-router.md` exists.
+- **Target**: All specification files under `docs/specs/*`.
 - **Output Structure**:
-  - `docs/spec-html/index.html` (Portal page: Hero, dependency DAG network diagram, role-based reading routes, specifications catalog table).
-  - `docs/spec-html/<relative-path-to-spec>.html` (Individual specification pages mirroring the source hierarchy under `docs/spec/`).
+  - `docs/specs-html/index.html` (Portal page: Hero, dependency DAG network diagram, role-based reading routes, specifications catalog table).
+  - `docs/specs-html/<relative-path-to-spec>.html` (Individual specification pages mirroring the source hierarchy under `docs/specs/`).
 - **Navigation Contract**:
   - Every generated page MUST include the shared top navigation bar (`.global-nav`) and breadcrumbs bar (`.breadcrumbs`).
   - `.global-nav` maintains a sticky 52px single-row height: desktop uses hierarchical hover dropdowns (`.nav-dropdown`), while mobile (<=768px) collapses to a 52px bar with a hamburger toggle (`.nav-mobile-btn`) expanding an accordion menu (`.nav-mobile-collapse`).
   - `.breadcrumbs` immediately follows `.global-nav` to indicate portal hierarchy and current document name.
 
-### 2. Case 1-2: Mirrored Spec Mode (Target Specified + `docs/spec/spec-router.md` Exists)
-- **Condition**: `$target` is explicitly specified (e.g., `docs/spec/system/overview.md`), and `docs/spec/spec-router.md` exists.
+### 2. Case 1-2: Mirrored Spec Mode (Target Specified + `docs/specs/spec-router.md` Exists)
+- **Condition**: `$target` is explicitly specified (e.g., `docs/specs/system/overview.md`), and `docs/specs/spec-router.md` exists.
 - **Target**: Specified specification file(s).
 - **Output Structure**:
-  - Mirrored under `docs/spec-html/` maintaining the same relative hierarchy (e.g., `docs/spec-html/system/overview.html`).
+  - Mirrored under `docs/specs-html/` maintaining the same relative hierarchy (e.g., `docs/specs-html/system/overview.html`).
   - Contains `.global-nav` with relative links to portal index (`../index.html`) and peer specifications.
 
 ### 3. Case 2-1: Interactive Prompt for Target & Output (Target Unspecified + Router Missing)
-- **Condition**: `$target` is omitted, and `docs/spec/spec-router.md` does NOT exist.
+- **Condition**: `$target` is omitted, and `docs/specs/spec-router.md` does NOT exist.
 - **Action**: Halt autonomous generation. Prompt user to provide both the target specification file/directory and the desired output directory.
-- **Recommendation Rule**: Propose **exactly one** default output candidate (e.g., `docs/spec-html`).
+- **Recommendation Rule**: Propose **exactly one** default output candidate (e.g., `docs/specs-html`).
 - **Safety Guarantee**: MUST NOT guess or write files without explicit user specification.
 
 ### 4. Case 2-2: Interactive Prompt for Output (Target Specified + Router Missing)
-- **Condition**: `$target` is specified, but `docs/spec/spec-router.md` does NOT exist.
+- **Condition**: `$target` is specified, but `docs/specs/spec-router.md` does NOT exist.
 - **Action**: Target is known, but standard output destination is undefined. Prompt user to specify the output directory.
-- **Recommendation Rule**: Propose **exactly one** default output candidate (e.g., `<target-dir>/spec-html` or `docs/spec-html`).
+- **Recommendation Rule**: Propose **exactly one** default output candidate (e.g., `<target-dir>/specs-html` or `docs/specs-html`).
 - **Safety Guarantee**: MUST NOT write to an arbitrary directory before obtaining user confirmation.
 
 ---
@@ -125,7 +125,7 @@ Follow this cognitive sequence for individual specification HTML documents:
 
 ## Portal Page (`index.html`) Layout Standard
 
-When in Portal Mode, generate `docs/spec-html/index.html` with this structure:
+When in Portal Mode, generate `docs/specs-html/index.html` with this structure:
 
 ```
 1. Global Navigation (`.global-nav` with Home marked `.active`)
