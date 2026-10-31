@@ -12,29 +12,56 @@ This skill transforms formal, dense, and structured specifications (Markdown or 
 It operates as the **Human Read-Only View** in a CQRS specification architecture (e.g., [nebula121/AIDD_Template](https://github.com/nebula121/AIDD_Template)). It does **not** perform literal Markdown-to-HTML conversion or lossy superficial summarization. Instead, it systematically applies **Cognitive Unpacking** to reveal the *intent*, *value*, and *concrete reality* behind abstract rules and schemas.
 
 When invoked:
-- `$target` sets the target specification file, directory, or scope (default: auto-detected from environment).
+- `$target` sets the target specification file, directory, or scope (default: `docs/spec`).
 - `$lang` sets the output language (default: `ja`). If omitted, Japanese is used.
 
 ---
 
-## Operating Modes
+## Operating Modes & Routing Protocol
 
-Before generating HTML, inspect the environment and arguments to choose the operating mode:
+Before generating HTML, inspect the environment and arguments to resolve the execution protocol across 4 cases:
 
-### 1. Portal Mode (`docs/html/index.html` + Multi-Spec Hierarchy)
-- **Trigger**: When `docs/spec-router.md` exists in the repository, or when the user requests generating views for the full project / multiple specifications.
+```mermaid
+flowchart TD
+    Start["/spec-to-readable-html [target]"] --> CheckRouter{"Does docs/spec/spec-router.md exist?"}
+    
+    CheckRouter -- "Yes (Exists)" --> CheckTargetYes{"Is target specified?"}
+    CheckTargetYes -- "No (Omitted)" --> Case11["Case 1-1: Full Portal Conversion<br/>Target: docs/spec/*<br/>Output: docs/spec-html/*"]
+    CheckTargetYes -- "Yes (Specified)" --> Case12["Case 1-2: Mirrored Spec Conversion<br/>Target: Specified file(s)<br/>Output: docs/spec-html/* (mirrored)"]
+
+    CheckRouter -- "No (Missing)" --> CheckTargetNo{"Is target specified?"}
+    CheckTargetNo -- "No (Omitted)" --> Case21["Case 2-1: Prompt for Target & Output<br/>Suggest exactly 1 output candidate<br/>(e.g., docs/spec-html)"]
+    CheckTargetNo -- "Yes (Specified)" --> Case22["Case 2-2: Prompt for Output<br/>Suggest exactly 1 output candidate<br/>(e.g., &lt;target-dir&gt;/spec-html)"]
+```
+
+### 1. Case 1-1: Full Portal Mode (Target Unspecified + `docs/spec/spec-router.md` Exists)
+- **Condition**: `$target` is omitted or empty, and `docs/spec/spec-router.md` exists.
+- **Target**: All specification files under `docs/spec/*`.
 - **Output Structure**:
-  - `docs/html/index.html` (Portal page: Hero, dependency DAG network diagram, role-based reading routes, specifications catalog table).
-  - `docs/html/<relative-path-to-spec>.html` (Individual specification pages mirroring the source hierarchy, e.g., `docs/html/system/overview.html`).
+  - `docs/spec-html/index.html` (Portal page: Hero, dependency DAG network diagram, role-based reading routes, specifications catalog table).
+  - `docs/spec-html/<relative-path-to-spec>.html` (Individual specification pages mirroring the source hierarchy under `docs/spec/`).
 - **Navigation Contract**:
-  - Every generated page (including `index.html`) MUST include the shared top navigation bar (`.global-nav`).
+  - Every generated page MUST include the shared top navigation bar (`.global-nav`).
   - `.global-nav` groups links hierarchically (e.g., `Home`, `Layer 1: Core`, `Layer 2: System`, `Layer 3: Components`) and marks the current page with `.active`.
 
-### 2. Single Spec Mode (Single Portable HTML)
-- **Trigger**: When a specific single specification file is targeted and portal mode is not requested.
+### 2. Case 1-2: Mirrored Spec Mode (Target Specified + `docs/spec/spec-router.md` Exists)
+- **Condition**: `$target` is explicitly specified (e.g., `docs/spec/system/overview.md`), and `docs/spec/spec-router.md` exists.
+- **Target**: Specified specification file(s).
 - **Output Structure**:
-  - A single self-contained HTML file (e.g., `<spec-name>.html` or `docs/html/<spec-name>.html`).
-  - Contains `.global-nav` with home/relative navigation if part of a project, or standalone header if independent.
+  - Mirrored under `docs/spec-html/` maintaining the same relative hierarchy (e.g., `docs/spec-html/system/overview.html`).
+  - Contains `.global-nav` with relative links to portal index (`../index.html`) and peer specifications.
+
+### 3. Case 2-1: Interactive Prompt for Target & Output (Target Unspecified + Router Missing)
+- **Condition**: `$target` is omitted, and `docs/spec/spec-router.md` does NOT exist.
+- **Action**: Halt autonomous generation. Prompt user to provide both the target specification file/directory and the desired output directory.
+- **Recommendation Rule**: Propose **exactly one** default output candidate (e.g., `docs/spec-html`).
+- **Safety Guarantee**: MUST NOT guess or write files without explicit user specification.
+
+### 4. Case 2-2: Interactive Prompt for Output (Target Specified + Router Missing)
+- **Condition**: `$target` is specified, but `docs/spec/spec-router.md` does NOT exist.
+- **Action**: Target is known, but standard output destination is undefined. Prompt user to specify the output directory.
+- **Recommendation Rule**: Propose **exactly one** default output candidate (e.g., `<target-dir>/spec-html` or `docs/spec-html`).
+- **Safety Guarantee**: MUST NOT write to an arbitrary directory before obtaining user confirmation.
 
 ---
 
@@ -94,7 +121,7 @@ Follow this cognitive sequence for individual specification HTML documents:
 
 ## Portal Page (`index.html`) Layout Standard
 
-When in Portal Mode, generate `docs/html/index.html` with this structure:
+When in Portal Mode, generate `docs/spec-html/index.html` with this structure:
 
 ```
 1. Global Navigation (`.global-nav` with Home marked `.active`)
@@ -134,7 +161,7 @@ Maintain strict semantic distinctions using badges:
 
 Before finalizing any generated HTML document, verify:
 
-- [ ] **Mode**: Correctly selected Portal Mode vs. Single Spec Mode.
+- [ ] **Mode & Routing**: Correctly evaluated across Cases 1-1, 1-2, 2-1, or 2-2.
 - [ ] **Navigation**: `.global-nav` is present, correctly categorized, and highlights the current document as `.active`.
 - [ ] **Key Takeaways**: `.key-takeaway` provides a clear 3-bullet executive summary at the top.
 - [ ] **Visual Completeness**: Every page has at least one valid Mermaid diagram enclosed in `<figure class="diagram-container">`.
