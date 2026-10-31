@@ -242,12 +242,12 @@ Used on the Portal page (`index.html`) to guide different team members to their 
 
 ---
 
-### 1.6 Responsive Table Container (`.table-responsive`)
-Wraps any structured specification table to ensure horizontal scrolling on narrow viewports.
+### 1.6 Responsive Table Container (`.table-responsive`) ＆ Sticky Column (`.table-sticky-col`)
+Wraps any structured specification table to ensure horizontal scrolling on narrow viewports with sticky header and scroll hint shadow. Adding `.table-sticky-col` freezes the first column (guarded with `max-width: 180px` and unwrapped on <=640px).
 
 ```html
 <div class="table-responsive">
-  <table class="spec-table">
+  <table class="spec-table table-sticky-col">
     <thead>
       <tr>
         <th>シンボル / メソッド</th>
@@ -271,10 +271,11 @@ Wraps any structured specification table to ensure horizontal scrolling on narro
 ---
 
 ### 1.7 Diagrams with Lightbox Modal (`.diagram-container`)
-Mandatory on every page. Supports pan, zoom, and fullscreen inspection.
+Mandatory on every page. Constrained to `max-height: 520px` with a subtle static badge (Ponytail principle: no bounce or heavy animations). Supports pan, zoom, and fullscreen inspection.
 
 ```html
 <figure class="diagram-container" tabindex="0">
+  <div class="diagram-badge">🔍 拡大表示</div>
   <div class="mermaid">
 flowchart TD
     Client["Client / Invoker"] --> Gateway["API Gateway / Boundary"]
@@ -289,10 +290,34 @@ flowchart TD
 
 ### 1.8 Ancillary Components
 - **Badges**: `.badge-must`, `.badge-should`, `.badge-confirmed`, `.badge-inferred`, `.badge-open`, `.badge-risk-high`
-- **Callouts**: `.callout.callout-info`, `.callout.callout-warning`, `.callout.callout-danger`, `.callout.callout-success`
+- **Status Badges**: `.badge-status.badge-status-stable`, `.badge-status.badge-status-draft`, `.badge-status.badge-status-deprecated`
+- **Callouts (GitHub Alerts 5種)**:
+  - NOTE (青): `.callout.callout-note` + Octicon Info SVG
+  - TIP (緑): `.callout.callout-tip` + Octicon Lightbulb SVG
+  - IMPORTANT (紫): `.callout.callout-important` + Octicon Report/Alert SVG
+  - WARNING (橙): `.callout.callout-warning` + Octicon Triangle-alert SVG
+  - CAUTION (赤): `.callout.callout-caution` + Octicon Stop SVG
 - **Glossary**: `.glossary > .glossary-item > (.glossary-term, .glossary-def)`
 - **Risk Cards**: `.risk-card.risk-card--high > (.risk-header, .risk-body)`
 - **Directory Tree**: `.tree-view` (`white-space: pre`)
+
+### 1.9 Collapsible TOC for Mobile (`.toc-details`)
+Wraps the table of contents to provide accordion collapse on mobile (auto-closes on link click via minimal JS).
+
+```html
+<nav class="toc" aria-label="Table of contents">
+  <details class="toc-details" open>
+    <summary class="toc-summary">目次 (Table of Contents)</summary>
+    <div class="toc-content">
+      <div class="toc-title">Contents</div>
+      <ol>
+        <li><a href="#section-1">1. 要約</a></li>
+        <li><a href="#section-2">2. アーキテクチャ</a></li>
+      </ol>
+    </div>
+  </details>
+</nav>
+```
 
 ---
 
