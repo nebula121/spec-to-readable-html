@@ -41,8 +41,9 @@ flowchart TD
   - `docs/spec-html/index.html` (Portal page: Hero, dependency DAG network diagram, role-based reading routes, specifications catalog table).
   - `docs/spec-html/<relative-path-to-spec>.html` (Individual specification pages mirroring the source hierarchy under `docs/spec/`).
 - **Navigation Contract**:
-  - Every generated page MUST include the shared top navigation bar (`.global-nav`).
-  - `.global-nav` groups links hierarchically (e.g., `Home`, `Layer 1: Core`, `Layer 2: System`, `Layer 3: Components`) and marks the current page with `.active`.
+  - Every generated page MUST include the shared top navigation bar (`.global-nav`) and breadcrumbs bar (`.breadcrumbs`).
+  - `.global-nav` maintains a sticky 52px single-row height: desktop uses hierarchical hover dropdowns (`.nav-dropdown`), while mobile (<=768px) collapses to a 52px bar with a hamburger toggle (`.nav-mobile-btn`) expanding an accordion menu (`.nav-mobile-collapse`).
+  - `.breadcrumbs` immediately follows `.global-nav` to indicate portal hierarchy and current document name.
 
 ### 2. Case 1-2: Mirrored Spec Mode (Target Specified + `docs/spec/spec-router.md` Exists)
 - **Condition**: `$target` is explicitly specified (e.g., `docs/spec/system/overview.md`), and `docs/spec/spec-router.md` exists.
@@ -104,17 +105,18 @@ Structured tables and RFC 2119 keywords (`MUST`, `MUST NOT`, `SHOULD`) are effic
 Follow this cognitive sequence for individual specification HTML documents:
 
 ```
-1. Global Navigation (`.global-nav`)
-2. Document Header (`.doc-header`: Title, Subtitle, Meta badges)
-3. TOC Sidebar (`.toc`: Sticky on desktop, inline on mobile)
-4. Key Takeaways (`.key-takeaway`: 3-bullet core summary)
-5. Visual Architecture / Workflow (Mandatory Mermaid Diagram)
-6. Why & Before/After Comparison (`.comparison-grid`: Before vs. After)
-7. Public Interfaces & Contracts (`.table-responsive` > `.spec-table`)
-8. Concrete Scenario Trace (`.scenario-box`: Step-by-step example)
-9. Acceptance Criteria & Edge Cases (Tables with badges / Risk cards)
-10. Source Traceability & Appendix (Mapping back to original Markdown / RFC tags)
-11. Footer (`.doc-footer`: Generation metadata & copyright)
+1. Global Navigation (`.global-nav`: Layer dropdowns + mobile accordion)
+2. Breadcrumbs Bar (`.breadcrumbs`: Relative path and current document)
+3. Document Header (`.doc-header`: Title, Subtitle, Meta badges)
+4. TOC Sidebar (`.toc`: Sticky on desktop, inline on mobile)
+5. Key Takeaways (`.key-takeaway`: 3-bullet core summary)
+6. Visual Architecture / Workflow (Mandatory Mermaid Diagram)
+7. Why & Before/After Comparison (`.comparison-grid`: Before vs. After)
+8. Public Interfaces & Contracts (`.table-responsive` > `.spec-table`)
+9. Concrete Scenario Trace (`.scenario-box`: Step-by-step example)
+10. Acceptance Criteria & Edge Cases (Tables with badges / Risk cards)
+11. Source Traceability & Appendix (Mapping back to original Markdown / RFC tags)
+12. Footer (`.doc-footer`: Generation metadata & copyright)
 ```
 
 ---
@@ -162,7 +164,7 @@ Maintain strict semantic distinctions using badges:
 Before finalizing any generated HTML document, verify:
 
 - [ ] **Mode & Routing**: Correctly evaluated across Cases 1-1, 1-2, 2-1, or 2-2.
-- [ ] **Navigation**: `.global-nav` is present, correctly categorized, and highlights the current document as `.active`.
+- [ ] **Navigation**: `.global-nav` (layer dropdowns & mobile accordion) and `.breadcrumbs` are present, correctly categorized, and highlight the current document as `.active`.
 - [ ] **Key Takeaways**: `.key-takeaway` provides a clear 3-bullet executive summary at the top.
 - [ ] **Visual Completeness**: Every page has at least one valid Mermaid diagram enclosed in `<figure class="diagram-container">`.
 - [ ] **Before/After**: `.comparison-grid` clearly contrasts risks without the spec vs. value with it.

@@ -6,38 +6,103 @@ This guide defines the HTML markup patterns, component snippets, and document la
 
 ## 1. Component Reference & Snippets
 
-### 1.1 Global Navigation (`.global-nav`)
-Used across all pages in Portal Mode. Categorizes links by architectural layer and highlights the current page with `.active`.
+### 1.1 Global Navigation (`.global-nav`) ＆ Breadcrumbs (`.breadcrumbs`)
+Used across all pages. PC displays a sticky 52px single-row bar with layer dropdowns; mobile displays a 52px bar with a hamburger toggle button that expands an accordion menu. Followed immediately by `.breadcrumbs`.
 
 ```html
 <nav class="global-nav">
   <div class="global-nav-inner">
-    <a href="../index.html" class="global-nav-brand">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <a href="../index.html" class="nav-brand">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
       </svg>
-      <span>Specification Portal</span>
+      <span>Spec Portal</span>
     </a>
-    <div class="global-nav-groups">
-      <div class="global-nav-group">
-        <span class="global-nav-group-label">Core</span>
-        <a href="../core-rules.html" class="nav-link">Core Rules</a>
-      </div>
-      <div class="global-nav-group">
-        <span class="global-nav-group-label">System</span>
-        <a href="overview.html" class="nav-link active">Overview</a>
-        <a href="architecture.html" class="nav-link">Architecture</a>
-        <a href="domain-rules.html" class="nav-link">Domain Rules</a>
-        <a href="tech-stack.html" class="nav-link">Tech Stack</a>
-      </div>
-      <div class="global-nav-group">
-        <span class="global-nav-group-label">Components</span>
-        <a href="../components/component-a.html" class="nav-link">Component A</a>
-        <a href="../components/component-b.html" class="nav-link">Component B</a>
-      </div>
-    </div>
+
+    <!-- PC Desktop Menu -->
+    <ul class="nav-desktop-menu">
+      <li class="nav-item"><a href="../index.html" class="nav-trigger">ホーム</a></li>
+      <li class="nav-item">
+        <button class="nav-trigger" type="button">
+          <span>L0/L1 規範・憲法</span>
+          <svg class="nav-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </button>
+        <div class="nav-dropdown">
+          <a href="../agents-guideline.html" class="nav-dropdown-item">
+            <div class="nav-dropdown-title">AGENTS.md</div>
+            <div class="nav-dropdown-desc">AIメタ行動規範</div>
+          </a>
+          <a href="../core-rules.html" class="nav-dropdown-item">
+            <div class="nav-dropdown-title">core-rules.md</div>
+            <div class="nav-dropdown-desc">システム不変条件</div>
+          </a>
+        </div>
+      </li>
+      <li class="nav-item">
+        <button class="nav-trigger active" type="button">
+          <span>L2 システム設計</span>
+          <svg class="nav-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </button>
+        <div class="nav-dropdown">
+          <a href="overview.html" class="nav-dropdown-item active">
+            <div class="nav-dropdown-title">overview.md ✓</div>
+            <div class="nav-dropdown-desc">システム概要 ＆ スコープ</div>
+          </a>
+          <a href="architecture.html" class="nav-dropdown-item">
+            <div class="nav-dropdown-title">architecture.md</div>
+            <div class="nav-dropdown-desc">全体アーキテクチャ</div>
+          </a>
+          <a href="domain-rules.html" class="nav-dropdown-item">
+            <div class="nav-dropdown-title">domain-rules.md</div>
+            <div class="nav-dropdown-desc">ドメイン業務規則</div>
+          </a>
+          <a href="tech-stack.html" class="nav-dropdown-item">
+            <div class="nav-dropdown-title">tech-stack.md</div>
+            <div class="nav-dropdown-desc">技術スタック・検証環境</div>
+          </a>
+        </div>
+      </li>
+      <li class="nav-item">
+        <button class="nav-trigger" type="button">
+          <span>L3 コンポーネント</span>
+          <svg class="nav-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </button>
+        <div class="nav-dropdown">
+          <a href="../components/component-a.html" class="nav-dropdown-item">
+            <div class="nav-dropdown-title">component-a.md</div>
+          </a>
+        </div>
+      </li>
+    </ul>
+
+    <!-- Mobile Toggle Button -->
+    <button class="nav-mobile-btn" type="button" onclick="toggleNav()">☰ メニュー</button>
+  </div>
+
+  <!-- Mobile Accordion Menu -->
+  <div id="navCollapse" class="nav-mobile-collapse">
+    <a href="../index.html" class="m-link" style="font-weight:700;">🏠 ポータルホーム</a>
+    <div class="m-group-title">L0/L1 規範 ＆ 憲法</div>
+    <a href="../agents-guideline.html" class="m-link">AGENTS.md</a>
+    <a href="../core-rules.html" class="m-link">core-rules.md</a>
+    <div class="m-group-title">L2 システム全体設計</div>
+    <a href="overview.html" class="m-link current">overview.md ✓</a>
+    <a href="architecture.html" class="m-link">architecture.md</a>
+    <a href="domain-rules.html" class="m-link">domain-rules.md</a>
+    <a href="tech-stack.html" class="m-link">tech-stack.md</a>
+    <div class="m-group-title">L3 個別コンポーネント</div>
+    <a href="../components/component-a.html" class="m-link">component-a.md</a>
   </div>
 </nav>
+
+<!-- Breadcrumbs Bar -->
+<div class="breadcrumbs">
+  <a href="../index.html">Portal</a>
+  <span>/</span>
+  <a href="overview.html">Layer 2: System</a>
+  <span>/</span>
+  <span class="curr">overview.html</span>
+</div>
 ```
 
 ---
