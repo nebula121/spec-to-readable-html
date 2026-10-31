@@ -39,8 +39,8 @@ AIエージェントが仕様書を解析・認知展開・図解化し、ポー
 
 | 公開シンボル / エンドポイント | 入力（型・値域制約） | 出力（戻り値 / レスポンス型） | 事前条件・事後条件 |
 | :--- | :--- | :--- | :--- |
-| `/spec-to-readable-html [target] [lang]` | `target: string` (対象ファイル/ディレクトリ、省略時は環境自動判定)、`lang: string` (省略可能、既定: `"ja"`) | ポータル（`docs/html/index.html` ＋ 仕様書群HTML）または単一HTML | **事前**: 対象仕様書または `docs/spec-router.md` が読み込み可能であること。<br>**事後**: `template.html` をベースとした自己完結HTML群が生成されること。 |
-| ポータルモード (`index.html`) | 全体仕様書解析結果、DAGネットワーク構造 | ポータルHTML (`docs/html/index.html`) | **事前**: `docs/spec-router.md` が存在するか全体変換指示であること。<br>**事後**: Hero、DAG全体図、ロール別読書ルート、仕様カタログ表を含むこと。 |
+| `/spec-to-readable-html [target] [lang]` | `target: string` (対象ファイル/ディレクトリ、省略時は既定: `docs/spec`)、`lang: string` (省略可能、既定: `"ja"`) | ポータル（`docs/spec-html/index.html` ＋ 仕様書群HTML）または指定仕様書HTML群 | **事前**: `docs/spec/spec-router.md` または指定対象ファイルが読み込み可能であること。<br>**事後**: `template.html` をベースとした自己完結HTML群が生成されること。 |
+| ポータルモード (`index.html`) | `docs/spec/*` 全体仕様書解析結果、DAGネットワーク構造 | ポータルHTML (`docs/spec-html/index.html`) | **事前**: `docs/spec/spec-router.md` が存在するか全体変換指示であること。<br>**事後**: Hero、DAG全体図、ロール別読書ルート、仕様カタログ表を含むこと。 |
 | 個別仕様書 HTML 認知展開構造 | 個別仕様書解析結果データ | 認知展開フローに準拠したHTMLブロック群 | **事前**: 仕様の要約・再編ではなく認知展開（Unpack）が適用されていること。<br>**事後**: Key Takeaways、必須Mermaid図解、Before/After対比、契約表、具象シナリオを含むこと。 |
 
 ---
@@ -51,11 +51,13 @@ AIエージェントが仕様書を解析・認知展開・図解化し、ポー
 
 | 区分 | トリガー・入力条件 | 期待動作・送出エラー (`MUST`) | 状態不変・副作用保証 |
 | :---: | :--- | :--- | :--- |
-| **正常系** | `docs/spec-router.md` が存在する環境または全体変換 | ポータルモードとして動作し、`docs/html/index.html` と各仕様書HTMLを同一相対階層へ出力する (**MUST**)。 | 各ページにカテゴリ別 `.global-nav` を配置し現在地をアクティブ化する。 |
-| **正常系** | 単一ファイル指定での変換要求 | 単一仕様書モードとして動作し、指定仕様書の単一HTMLを出力する (**MUST**)。 | 指定外のファイル生成を行わない。 |
+| **正常系 (Case 1-1)** | 対象指定なし（省略） かつ `docs/spec/spec-router.md` が存在 | ポータルモードとして動作し、`docs/spec/*` 配下の全仕様書を `docs/spec-html/*` 配下へ一括出力する (**MUST**)。 | ポータルトップ `docs/spec-html/index.html` と各仕様書HTMLを同一相対階層へ配置し、現在地アクティブな `.global-nav` を含める。 |
+| **正常系 (Case 1-2)** | 対象指定あり（ファイル指定） かつ `docs/spec/spec-router.md` が存在 | 指定仕様書変換として動作し、指定ファイルを `docs/spec-html/*` 内の同一相対階層（ミラーリング）へ出力する (**MUST**)。 | 指定外ファイルの破壊・上書きを行わず、既存ポータルナビゲーションとの相対リンク整合性を維持する。 |
 | **正常系** | 構造化表や RFC 2119 契約（`MUST`/`MUST NOT`）の解析 | 単なる転記を行わず、Key Takeaways、Before/After比較カード、具象シナリオ実例へと認知展開する (**MUST**)。 | 元仕様書の規範キーワード（MUST/SHOULD）およびAPI識別子の意味を改変しない。 |
 | **正常系** | すべての仕様書ページの生成 | 最低1つの Mermaid 図解（構造、多重防御、状態遷移、パイプライン等）を必ず配置する (**MUST**)。 | 図解のない仕様書ページを生成しない (**MUST NOT**)。 |
 | **正常系** | テーブル要素の出力 | すべての表を `.table-responsive` でラップする (**MUST**)。 | 横スクロール可能とし、幅狭画面でのレイアウト崩れを防ぐ。 |
+| **異常系/対話 (Case 2-1)** | 対象指定なし（省略） かつ `docs/spec/spec-router.md` が存在しない | 処理を中断し、ユーザーに対象ファイル（またはディレクトリ）および出力先ディレクトリの指定を要求する (**MUST**)。その際、出力先候補を1件のみ提案する（既定提案: `docs/spec-html`） (**MUST**)。 | 未指定状態での推測による自律ファイル生成・書き込みを行わない (**MUST NOT**)。 |
+| **異常系/対話 (Case 2-2)** | 対象指定あり（ファイル指定） かつ `docs/spec/spec-router.md` が存在しない | 処理を中断し、ユーザーに出力先ディレクトリの指定を要求する (**MUST**)。その際、出力先候補を1件のみ提案する（提案例: 指定ファイルの親横 `spec-html`） (**MUST**)。 | 出力先未承認のまま任意パスへ直接書き込みを行わない (**MUST NOT**)。 |
 | **異常系** | 仕様書に未定義の曖昧な仕様や推論シナリオ | 独断で確定事実化せず、`[Inferred]` または `[Example]` バッジを明記する (**MUST**)。 | 未確証の仕様を確定事実（Confirmed）として出力しない (**MUST NOT**)。 |
 | **異常系** | 入力テキストに `<script>` 等の危険タグ混入 | HTML特殊文字（`&`, `<`, `>`, `"`, `'`）をエスケープして安全なテキストノードとして出力する (**MUST**)。 | 悪意あるスクリプトの実行を防止する (**MUST NOT**)。 |
 
@@ -71,5 +73,9 @@ AIエージェントが仕様書を解析・認知展開・図解化し、ポー
 | `AC-SKILL-02` | `MUST` / `MUST NOT` 等の制約仕様を入力 | `.comparison-grid`（Before/After対比カード）が出力されていること (**MUST**)。 | 生成HTML文字列検査 |
 | `AC-SKILL-03` | 抽象的な型やフローを含む仕様を入力 | `.scenario-box`（具体例トレース）に `[Inferred]` または `[Example]` バッジが付与されて出力されること (**MUST**)。 | 生成HTML文字列検査 |
 | `AC-SKILL-04` | 任意の仕様書ページを出力 | 最低1つの `.diagram-container > .mermaid`（Mermaid図解）が配置されていること (**MUST**)。 | 生成HTML文字列検査 |
-| `AC-SKILL-05` | ポータルモードでの変換実行 | `docs/html/index.html` が生成され、共通ナビゲーション `.global-nav` で相互リンクが確立されていること (**MUST**)。 | ファイル存在・相対リンク検証 |
+| `AC-SKILL-05` | ポータルモードでの変換実行 | `docs/spec-html/index.html` が生成され、共通ナビゲーション `.global-nav` で相互リンクが確立されていること (**MUST**)。 | ファイル存在・相対リンク検証 |
 | `AC-SKILL-06` | すべてのテーブルの配置 | 表が `<div class="table-responsive">` でラップされていること (**MUST**)。 | 生成HTML構造検査 |
+| `AC-SKILL-07` | Case 1-1（対象未指定 かつ `docs/spec/spec-router.md` 存在） | `docs/spec/*` の全仕様書が `docs/spec-html/*` へ一括ポータル変換されること (**MUST**)。 | スキル動作・出力パス検証 |
+| `AC-SKILL-08` | Case 1-2（対象指定あり かつ `docs/spec/spec-router.md` 存在） | 指定ファイルが `docs/spec-html/*` 配下の元階層維持（ミラーリング）で出力されること (**MUST**)。 | スキル動作・出力パス検証 |
+| `AC-SKILL-09` | Case 2-1（対象未指定 かつ `docs/spec/spec-router.md` 不存在） | 対象・出力先の指定が要求され、出力先候補が1件提案（`docs/spec-html`）されること (**MUST**)。 | 対話プロトコル検査 |
+| `AC-SKILL-10` | Case 2-2（対象指定あり かつ `docs/spec/spec-router.md` 不存在） | 出力先の指定が要求され、出力先候補が1件提案されること (**MUST**)。 | 対話プロトコル検査 |
